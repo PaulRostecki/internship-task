@@ -50,14 +50,12 @@ def get_ip_xml():
     return dict2xml({'ip': user_ip})
 
 @app.route('/iplist', methods=['GET'])
-def html():
-
-    iplist = []
+def iplist():
 
     with open("iplist.json", "r") as file:
         data = json.load(file)
         iplist = data['ip']
 
-    return str(iplist)
+    return flask.jsonify(iplist)
 
 app.run(host='0.0.0.0')

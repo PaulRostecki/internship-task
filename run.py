@@ -12,7 +12,7 @@ DB_USERNAME = os.environ.get('MONGODB_USER', 'admin')
 DB_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'admin')
 DB_NAME = os.environ.get('MONGODB_DATABASE', 'sampledb')
 
-client = pymongo.MongoClient(host=127.0.0.1,
+client = pymongo.MongoClient(host='127.0.0.1',
                                 port=27017,
                                 username=DB_USERNAME,
                                 password=DB_PASSWORD)

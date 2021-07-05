@@ -2,20 +2,34 @@ import flask
 import json
 from flask_accept import accept
 from dict2xml import dict2xml
+import os
+import pymongo
 
 app = flask.Flask(__name__)
 
+PORT = int(os.environ.get('OPENSHIFT_PYTHON_PORT', 8080))
+DB_USERNAME = os.environ.get('MONGODB_USER', 'admin')
+DB_PASSWORD = os.environ.get('MONGODB_ADMIN_PASSWORD', 'admin')
+DB_NAME = os.environ.get('MONGODB_DATABASE', 'sampledb')
+
+client = pymongo.MongoClient(host=localhost,
+                                port=27017,
+                                username=DB_USERNAME,
+                                password=DB_PASSWORD)
+db = client["database"]
+col = db["ip"]
+
 def handle_ip():
     user_ip = flask.request.remote_addr
-    with open("iplist.json", "r+") as file:
-        data = json.load(file)
-        data['ip'].append(user_ip)
-        file.seek(0)
-        json.dump(data, file)
+    dict = {'ip': user_ip}
+    x = col.insert_one(dict)
     return user_ip
 
+@app.route('/')
+def hello():
+    return "Welcome to Get IP page!"
 
-@app.route('/', methods=['GET'])
+@app.route('/ip', methods=['GET'])
 @accept('text/html')
 def get_ip():
     user_ip = handle_ip()
@@ -51,11 +65,10 @@ def get_ip_xml():
 
 @app.route('/iplist', methods=['GET'])
 def iplist():
-
-    with open("iplist.json", "r") as file:
-        data = json.load(file)
-        iplist = data['ip']
+    tab = []
+    for x in col.find({},{ "_id": 0, "ip": 1}):
+        tab.append(x['ip'])
 
     return flask.jsonify(iplist)
 
-app.run(host='0.0.0.0', port=8080)
+app.run(host='0.0.0.0', port=PORT)

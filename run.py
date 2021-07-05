@@ -16,7 +16,7 @@ client = pymongo.MongoClient(host='127.0.0.1',
                                 port=27017,
                                 username=DB_USERNAME,
                                 password=DB_PASSWORD)
-db = client["database"]
+db = client[DB_NAME]
 col = db["ip"]
 
 def handle_ip():

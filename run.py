@@ -11,11 +11,11 @@ PORT = int(os.environ.get('OPENSHIFT_PYTHON_PORT', 8080))
 DB_USERNAME = os.environ.get('MONGODB_USER', 'admin')
 DB_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'admin')
 DB_NAME = os.environ.get('MONGODB_DATABASE', 'sampledb')
+DB_HOST = "mongodb://" + os.environ.get('MONGODB_SERVICE_HOST', '0.0.0.0') + ':' + os.environ.get('MONGODB_SERVICE_PORT', 27017)
 
-client = pymongo.MongoClient(host='127.0.0.1',
-                                port=27017,
-                                username=DB_USERNAME,
-                                password=DB_PASSWORD)
+client = pymongo.MongoClient(host=DB_HOST,
+                            username=DB_USERNAME,
+                            password=DB_PASSWORD)
 db = client[DB_NAME]
 col = db["ip"]
 

@@ -9,10 +9,10 @@ app = flask.Flask(__name__)
 
 PORT = int(os.environ.get('OPENSHIFT_PYTHON_PORT', 8080))
 DB_USERNAME = os.environ.get('MONGODB_USER', 'admin')
-DB_PASSWORD = os.environ.get('MONGODB_ADMIN_PASSWORD', 'admin')
+DB_PASSWORD = os.environ.get('MONGODB_PASSWORD', 'admin')
 DB_NAME = os.environ.get('MONGODB_DATABASE', 'sampledb')
 
-client = pymongo.MongoClient(host=localhost,
+client = pymongo.MongoClient(host=127.0.0.1,
                                 port=27017,
                                 username=DB_USERNAME,
                                 password=DB_PASSWORD)

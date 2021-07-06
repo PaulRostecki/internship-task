@@ -104,6 +104,6 @@ def iplist_xml():
 @app.route('/iplist/probe', methods=['GET'])
 def iplist_probe():
     list = fetch_ip()
-    return str(fetch_ip)
+    return str(list)
 
 app.run(host='0.0.0.0', port=PORT)

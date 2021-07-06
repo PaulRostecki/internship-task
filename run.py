@@ -70,6 +70,6 @@ def iplist():
     for x in col.find({},{ "_id": 0, "ip": 1}):
         tab.append(x['ip'])
 
-    return flask.jsonify(iplist)
+    return flask.jsonify(ip=tab)
 
 app.run(host='0.0.0.0', port=PORT)

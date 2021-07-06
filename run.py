@@ -100,4 +100,9 @@ def iplist_xml():
     list = fetch_ip()
     return yaml.dump({'ip': list})
 
+#added, because openshift probe has no option to set 'Accept' header and always returns 406 when checking /iplist
+@app.route('/iplist/probe', methods=['GET'])
+def iplist():
+    return fetch_ip()
+
 app.run(host='0.0.0.0', port=PORT)

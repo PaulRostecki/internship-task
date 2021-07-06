@@ -1,4 +1,4 @@
-Flask==2.0.1
-flask_accept==0.0.6
-dict2xml==1.7.0
 pymongo==3.11.4
+flask_accept==0.0.6
+Flask==2.0.1
+PyYAML==5.4.1

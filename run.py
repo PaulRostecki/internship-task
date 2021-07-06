@@ -1,7 +1,7 @@
 import flask
 import json
 from flask_accept import accept
-from dict2xml import dict2xml
+import yaml
 import os
 import pymongo
 
@@ -26,6 +26,12 @@ def handle_ip():
     x = col.insert_one(dict)
     return user_ip
 
+def fetch_ip():
+    tab = []
+    for x in col.find({},{ "_id": 0, "ip": 1}):
+        tab.append(x['ip'])
+    return tab
+
 @app.route('/')
 def hello():
     return "Welcome to Get IP page!"
@@ -35,7 +41,6 @@ def hello():
 def get_ip():
     user_ip = handle_ip()
     return flask.render_template_string('''
-
     <!DOCTYPE html>
     <html>
       <head>
@@ -46,7 +51,6 @@ def get_ip():
         {{ ip }}
       </body>
     </html>
-
     ''', ip=user_ip)
 
 @get_ip.support('text/plain')
@@ -59,17 +63,41 @@ def get_ip_json():
     user_ip = handle_ip()
     return flask.jsonify(ip=user_ip)
 
-@get_ip.support('application/xml')
+@get_ip.support('text/yaml')
 def get_ip_xml():
     user_ip = handle_ip()
-    return dict2xml({'ip': user_ip})
+    return yaml.dump({'ip': user_ip})
 
 @app.route('/iplist', methods=['GET'])
+@accept('text/html')
 def iplist():
-    tab = []
-    for x in col.find({},{ "_id": 0, "ip": 1}):
-        tab.append(x['ip'])
+    list = fetch_ip()
+    return flask.render_template_string('''
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>IP List</title>
+      </head>
+      <body>
+        {{ list }}
+      </body>
+    </html>
+    ''', list=list)
 
-    return flask.jsonify(ip=tab)
+@iplist.support('text/plain')
+def iplist_text():
+    list = fetch_ip()
+    return str(list)
+
+@iplist.support('application/json')
+def iplist_json():
+    list = fetch_ip()
+    return flask.jsonify(ip=list)
+
+@iplist.support('text/yaml')
+def iplist_xml():
+    list = fetch_ip()
+    return yaml.dump({'ip': list})
 
 app.run(host='0.0.0.0', port=PORT)

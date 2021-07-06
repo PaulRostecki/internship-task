@@ -102,7 +102,7 @@ def iplist_xml():
 
 #added, because openshift probe has no option to set 'Accept' header and always returns 406 when checking /iplist
 @app.route('/iplist/probe', methods=['GET'])
-def iplist():
+def iplist_probe():
     return fetch_ip()
 
 app.run(host='0.0.0.0', port=PORT)
